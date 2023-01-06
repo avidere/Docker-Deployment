@@ -88,7 +88,7 @@ pipeline {
                     echo 'Artifact uploaded to nexus repository'
                 }
             }
-        }
+        }/*
         stage('Transfer pom.xml file on remote server') {
             steps {
                 script {
@@ -104,7 +104,7 @@ pipeline {
                     sshPut remote: remote, from: '/var/lib/jenkins/workspace/Tomcat-Project/inventory', into: '.'
                 }
             }
-        } /*
+        } 
 
         stage('Execute Ansible Playbook on Ansible controller node') {
             steps {
