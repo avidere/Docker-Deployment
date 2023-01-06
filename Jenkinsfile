@@ -1,4 +1,4 @@
-/* groovylint-disable LineLength, NoDef */
+/* groovylint-disable DuplicateMapLiteral, LineLength, NoDef, SpaceBeforeOpeningBrace */
 /* groovylint-disable-next-line LineLength */
 /* groovylint-disable CompileStatic, DuplicateStringLiteral, NestedBlockDepth, UnusedVariable, VariableName, VariableTypeRequired */
 pipeline {
@@ -115,8 +115,13 @@ pipeline {
         }*/
         stage('Build Docker image and run container'){
             steps{
+                def mavenpom = readMavenPom file: 'pom.xml'
+                def artifactId= 'helloworld'
+                def version = "${mavenpom.version}"
+
                 sshagent(['Docker-Server']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 ls -lrt'
+                    /* groovylint-disable-next-line GStringExpressionWithinString */
+                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 docker build --build-args artifact_id="${artifactId}" --build-args version="${version}" -t tomcat:v3 .'
                 }
             }
         }
