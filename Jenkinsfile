@@ -1,4 +1,4 @@
-/* groovylint-disable LineLength */
+/* groovylint-disable LineLength, NoDef */
 /* groovylint-disable-next-line LineLength */
 /* groovylint-disable CompileStatic, DuplicateStringLiteral, NestedBlockDepth, UnusedVariable, VariableName, VariableTypeRequired */
 pipeline {
@@ -24,7 +24,6 @@ pipeline {
         def remote_host = '18.183.130.147'
         def remote_user = 'devops'
         def remote_password = 'devops'
-        
     }
     stages {
         stage('Git Checkout') {
@@ -34,7 +33,7 @@ pipeline {
                     echo 'Git Checkout Completed'
                 }
             }
-        } 
+        }
         /* groovylint-disable-next-line SpaceAfterClosingBrace */
         stage('Maven Build') {
             steps {
@@ -65,18 +64,17 @@ pipeline {
                     waitForQualityGate abortPipeline: true, credentialsId: "${sonar_cred}"
                 }
             }
-        } */ 
+        } */
         stage('Upload Artifact to nexus repository') {
             steps {
                 script {
-
-                   def mavenpom = readMavenPom file: 'pom.xml'
-                   def nex_repo = mavenpom.version.endsWith('SNAPSHOT') ? 'tomcat-SNAPSHOT' : 'tomact-Release'
+                    def mavenpom = readMavenPom file: 'pom.xml'
+                    def nex_repo = mavenpom.version.endsWith('SNAPSHOT') ? 'tomcat-SNAPSHOT' : 'tomact-Release'
                     nexusArtifactUploader artifacts: [
                     [
                         artifactId: 'helloworld',
                         classifier: '',
-                        file: "target/helloworld.war",
+                        file: 'target/helloworld.war',
                         type: 'war'
                     ]
                 ],
@@ -85,15 +83,15 @@ pipeline {
                     nexusUrl: "${env.nex_url}",
                     nexusVersion: "${env.nex_ver}",
                     protocol: "${env.proto}",
-                    repository: "tomcat-Release",
+                    repository: 'tomcat-Release',
                     version: "${mavenpom.version}"
                     echo 'Artifact uploaded to nexus repository'
                 }
             }
         }
         stage('Transfer pom.xml file on remote server') {
-            steps{
-                script{
+            steps {
+                script {
                     def remote = [:]
                     remote.name = "${remote_name}"
                     remote.host = "${remote_host}"
@@ -108,15 +106,13 @@ pipeline {
             }
         }
 
-        stage('Execute Ansible Playbook on Ansible controller node'){
-
-            steps{
+        stage('Execute Ansible Playbook on Ansible controller node') {
+            steps {
                 sshagent(['Ansible-Server']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l devops 18.183.130.147 ansible-playbook tomcat.yaml -i inventory'
                 }
             }
-        } 
-
+        }
     }
 }
 
