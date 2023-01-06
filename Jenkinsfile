@@ -104,12 +104,19 @@ pipeline {
                     sshPut remote: remote, from: '/var/lib/jenkins/workspace/Tomcat-Project/inventory', into: '.'
                 }
             }
-        }
+        } /*
 
         stage('Execute Ansible Playbook on Ansible controller node') {
             steps {
                 sshagent(['Ansible-Server']) {
                     sh 'ssh -o StrictHostKeyChecking=no -l devops 18.183.130.147 ansible-playbook tomcat.yaml -i inventory'
+                }
+            }
+        }*/
+        stage('Build Docker image and run container'){
+            steps{
+                sshagent(['Docker-Server']) {
+                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 uname -a'
                 }
             }
         }
