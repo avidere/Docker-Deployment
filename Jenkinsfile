@@ -122,7 +122,7 @@ pipeline {
 
                     sshagent(['Docker-Server']) {
                     /* groovylint-disable-next-line GStringExpressionWithinString */
-                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 docker build --build-args artifact_id=helloworld --build-args version=1.0 -t tomcat:v3 .'
+                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 docker build --build-arg artifact_id="${artifactId}" --build-arg version=1.0 -t tomcat:v3 .'
                     }
 
                 }
