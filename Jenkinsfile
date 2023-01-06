@@ -116,7 +116,7 @@ pipeline {
         stage('Build Docker image and run container'){
             steps{
                 sshagent(['Docker-Server']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 uname -a'
+                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 ls -lrt'
                 }
             }
         }
