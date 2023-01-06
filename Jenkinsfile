@@ -116,14 +116,14 @@ pipeline {
         stage('Build Docker image and run container'){
             steps{
                 script{
-                def mavenpom = readMavenPom file: 'pom.xml'
-                def artifactId= 'helloworld'
-                def version = "${mavenpom.version}"
+                    def mavenpom = readMavenPom file: 'pom.xml'
+                    def artifactId= 'helloworld'
+                    def version = "${mavenpom.version}"
 
-                sshagent(['Docker-Server']) {
+                    sshagent(['Docker-Server']) {
                     /* groovylint-disable-next-line GStringExpressionWithinString */
-                    sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 docker build --build-args artifact_id="${artifactId}" --build-args version="${version}" -t tomcat:v3 .'
-                   }
+                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 43.207.81.86 docker build --build-args artifact_id=helloworld --build-args version=1.0 -t tomcat:v3 .'
+                    }
 
                 }
             }
