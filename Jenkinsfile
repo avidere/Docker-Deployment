@@ -121,8 +121,8 @@ pipeline {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
                     /* groovylint-disable-next-line GStringExpressionWithinString */
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.41.110 docker build --build-arg artifact_id=${artifactId} --build-arg nexus_url=${env.nex_url} --build-arg version=${mavenpom.version} -t tomcat:v3 ."
-                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.41.110 docker run -d --name tomcatv3 -p 8087:8080 tomcat:v3 '
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 13.112.159.189 docker build --build-arg artifact_id=${artifactId} --build-arg nexus_url=${env.nex_url} --build-arg version=${mavenpom.version} -t tomcat:v3 ."
+                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 13.112.159.189 docker run -d --name tomcatv3 -p 8087:8080 tomcat:v3 '
                     }
 
                 }
