@@ -86,6 +86,7 @@ pipeline {
                     repository: 'tomcat-Release',
                     version: "${mavenpom.version}"
                     echo 'Artifact uploaded to nexus repository'
+                    
                 }
             }
         }/*
