@@ -114,25 +114,6 @@ pipeline {
                 }
             }
         }*/
-        stage('Build Docker image and push on Docker hub'){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'Docker_hub', passwordVariable: 'docker_pass', usernameVariable: 'docker_user')]) {
-                script{
-                    sshagent(['Docker-Server']) {
-                        def mavenpom = readMavenPom file: 'pom.xml'
-                        def artifactId= 'helloworld'
-                        def tag = "${mavenpom.version}"
-                    /* groovylint-disable-next-line GStringExpressionWithinString */
-                        sh "sudo sed 's/tag/${tag}/g' /var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u $docker_user -p $docker_pass"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
-                    }
-                   }
-                }
-            }
-        }
         stage('Transfer file on EKS cluster'){
             steps{
                 script{
@@ -144,6 +125,25 @@ pipeline {
                         remote.allowAnyHosts = true
                         sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml', into: '.'
                         sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/service.yaml', into: '.'
+                }
+            }
+        }
+        stage('Build Docker image and push on Docker hub'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'Docker_hub', passwordVariable: 'docker_pass', usernameVariable: 'docker_user')]) {
+                script{
+                    sshagent(['Docker-Server']) {
+                        def mavenpom = readMavenPom file: 'pom.xml'
+                        def artifactId= 'helloworld'
+                        def tag = "${mavenpom.version}"
+                    /* groovylint-disable-next-line GStringExpressionWithinString */
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sed 's/tag/${tag}/g' Deployment.yaml"
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u $docker_user -p $docker_pass"
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
+                    }
+                   }
                 }
             }
         }
