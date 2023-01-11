@@ -126,7 +126,6 @@ pipeline {
                         sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u avinashdere99 -p A@vinash2412'
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
-                        sh 'scp -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 '
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml"
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f service.yaml"
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo perl -ip -e 's/tag/${mavenpom.version}/g' Deployment.yaml"
@@ -143,8 +142,8 @@ pipeline {
                         def remote = [:]
                         remote.name = 'ubuntu'
                         remote.host = '172.31.22.228'
-                        remote.user = 'ubuntu'
-                       // remote.password = 'password'
+                        remote.user = 'dockeradmin'
+                        remote.password = 'dockeradmin'
                         remote.allowAnyHosts = true
                             sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/pom.xml', into: '.'
                    
