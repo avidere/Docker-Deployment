@@ -117,11 +117,10 @@ pipeline {
         stage('Build Docker image and run container'){
             steps{
                 script{
-
-                    sh 'ls -lrt /var/lib/jenkins/workspace/Docker Deployment'
                     sshagent(['Docker-Server']) {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
+                        sh 'ls -lrt'
                     /* groovylint-disable-next-line GStringExpressionWithinString */
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
                         sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u avinashdere99 -p A@vinash2412'
