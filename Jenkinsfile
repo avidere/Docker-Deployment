@@ -125,7 +125,7 @@ pipeline {
                         sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u avinashdere99 -p A@vinash2412'
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
-                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml service.yaml"
+                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml"
                         sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f service.yaml"
                         sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl get all"
                     }
