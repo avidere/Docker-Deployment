@@ -121,7 +121,6 @@ pipeline {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
                         def tag = "${mavenpom.version}"
-                        sh 'ls -lrt'
                     /* groovylint-disable-next-line GStringExpressionWithinString */
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
                         sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u avinashdere99 -p A@vinash2412'
@@ -129,7 +128,8 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
                       //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml"
                       //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f service.yaml"
-                        sh "ssh -o StrictHostKeyChecking=no -l root 172.31.22.228 sudo kubectl get all"
+                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo sed 's/tag/${mavenpom.version}/g' Deployment.yaml"
+                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl get all"
                     }
 
                 }
