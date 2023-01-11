@@ -124,8 +124,8 @@ pipeline {
                         remote.user = 'dockeradmin'
                         remote.password = 'dockeradmin'
                         remote.allowAnyHosts = true
-                        sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/*.yaml', into: '.'
-                   
+                        sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml', into: '.'
+                        sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/service.yaml', into: '.'
                 }
             }
         }
