@@ -16,7 +16,7 @@ pipeline {
 
         def nex_cred = 'nexus'
         def grp_ID = 'example.demo'
-        def nex_url = '18.180.248.209:8081'
+        def nex_url = '172.31.1.167:8081'
         def nex_ver = 'nexus3'
         def proto = 'http'
 
@@ -113,14 +113,14 @@ pipeline {
                     sh 'ssh -o StrictHostKeyChecking=no -l devops 18.183.130.147 ansible-playbook tomcat.yaml -i inventory'
                 }
             }
-        }*/
+        }
         stage('Build Docker image and run container'){
             steps{
                 script{
                     sshagent(['Docker-Server']) {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
-                    /* groovylint-disable-next-line GStringExpressionWithinString */
+                    /* groovylint-disable-next-line GStringExpressionWithinString 
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 13.112.159.189 docker build --build-arg artifact_id=${artifactId} --build-arg nexus_url=${env.nex_url} --build-arg version=${mavenpom.version} -t 172.31.26.74:8083/tomcat:${mavenpom.version} ."
                         sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 13.112.159.189 docker login -u admin -p nexus 172.31.26.74:8083'
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 13.112.159.189 docker push 172.31.26.74:8083/tomcat:${mavenpom.version}"
@@ -129,7 +129,7 @@ pipeline {
 
                 }
             }
-        }
+        }*/
     }
 }
 
