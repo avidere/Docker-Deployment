@@ -118,7 +118,7 @@ pipeline {
             steps{
                 script{
 
-                    sh 'ls -ld'
+                    sh 'ls -lrt /var/lib/jenkins/workspace/Docker Deployment/'
                     sshagent(['Docker-Server']) {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
