@@ -132,8 +132,9 @@ pipeline {
         stage('Build Docker image and push on Docker hub'){
             steps{
                 script{
-                    withCredentials([usernamePassword(credentialsId: 'Docker_hub', passwordVariable: 'docker_pass', usernameVariable: 'docker_user')]) {
+                    
                     sshagent(['Docker-Server']) {
+                        withCredentials([usernamePassword(credentialsId: 'Docker_hub', passwordVariable: 'docker_pass', usernameVariable: 'docker_user')]) {
                         def mavenpom = readMavenPom file: 'pom.xml'
                         def artifactId= 'helloworld'
                         def tag = "${mavenpom.version}"
