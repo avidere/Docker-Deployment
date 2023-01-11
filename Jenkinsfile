@@ -145,7 +145,7 @@ pipeline {
                         remote.user = 'ubuntu'
                        // remote.password = 'password'
                         remote.allowAnyHosts = true
-                            sshPut remote: remote, from: '/var/lib/jenkins/workspace/Tomcat-Project/pom.xml', into: '.'
+                            sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/pom.xml', into: '.'
                    
                 }
             }
