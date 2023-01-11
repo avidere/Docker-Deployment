@@ -24,11 +24,6 @@ pipeline {
         def remote_host = '18.183.130.147'
         def remote_user = 'devops'
         def remote_password = 'devops'
-
-        def remote_name = 'ubuntu'
-        def remote_host = '18.183.130.147'
-        def remote_user = 'devops'
-        def remote_password = 'devops'
     }
     stages {
         stage('Git Checkout') {
