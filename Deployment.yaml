@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: app-tomcat
-        image: avinashdere99/tomcat:${mavenpom.version}
+        image: avinashdere99/tomcat:${tag}
         ports:
         - containerPort: 8080
