@@ -139,7 +139,7 @@ pipeline {
                         def tag = "${mavenpom.version}"
                     /* groovylint-disable-next-line GStringExpressionWithinString */
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
-                        sh 'ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u avinashdere99 -p A@vinash2412'
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u $docker_user -p $docker_pass"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sudo cp Deployment.yaml service.yaml /home/ubuntu/"
