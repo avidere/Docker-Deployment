@@ -157,7 +157,7 @@ pipeline {
                     /* groovylint-disable-next-line GStringExpressionWithinString */
                       //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo sed 's/tag/${tag}/g' Deployment.yaml"
                         
-                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f deployment.yaml"
+                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml"
                         sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f service.yaml"
                         sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl get all"
                     }
