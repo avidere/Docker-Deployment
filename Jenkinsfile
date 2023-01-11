@@ -138,7 +138,7 @@ pipeline {
         stage('Transfer file on EKS cluster'){
             steps{
                 script{
-                     {
+                     
                         def remote = [:]
                         remote.name = 'ubuntu'
                         remote.host = '172.31.22.228'
@@ -146,7 +146,7 @@ pipeline {
                        // remote.password = 'password'
                         remote.allowAnyHosts = true
                             sshPut remote: remote, from: '/var/lib/jenkins/workspace/Tomcat-Project/pom.xml', into: '.'
-                   }
+                   
                 }
             }
         }
