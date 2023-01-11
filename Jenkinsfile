@@ -131,6 +131,7 @@ pipeline {
         }
         stage('Build Docker image and push on Docker hub'){
             steps{
+                withCredentials([usernamePassword(credentialsId: 'Docker_hub', passwordVariable: 'docker_pass', usernameVariable: 'docker_user')]) {
                 script{
                     sshagent(['Docker-Server']) {
                         def mavenpom = readMavenPom file: 'pom.xml'
@@ -143,7 +144,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sudo cp Deployment.yaml service.yaml /home/ubuntu/"
                     }
-
+                   }
                 }
             }
         }
