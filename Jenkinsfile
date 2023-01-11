@@ -114,7 +114,7 @@ pipeline {
                 }
             }
         }*/
-        stage('Build Docker image and run container'){
+        stage('Build Docker image and push on Docker hub'){
             steps{
                 script{
                     sshagent(['Docker-Server']) {
@@ -128,39 +128,25 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f Deployment.yaml"
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl apply -f service.yaml"
-                    //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo sed 's/tag/${mavenpom.version}/g' Deployment.yaml"
+                    //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo perl -ip -e 's/tag/${mavenpom.version}/g' Deployment.yaml"
                     //  sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl get all"
                     }
 
                 }
             }
-        }/*
-        stage('Transfer k8s mainfest file on k8s server') {
-            steps {
-                script {
-                    def remote = [:]
-                    remote.name = "${remote_name}"
-                    remote.host = "${remote_host}"
-                    remote.user = "${remote_user}"
-                    remote.password = "${remote_password}"
-                    remote.allowAnyHosts = true
-                    sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Service.yaml', into: '.'
-                    sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml', into: '.'
-                }
-            }
-        } */
-        stage('Deploy Application on EKS cluster'){
+        }
+        stage('Transfer file on EKS cluster'){
             steps{
                 script{
-                    sshagent(['Docker-Server']) {
-                        def mavenpom = readMavenPom file: 'pom.xml'
-                        def artifactId= 'helloworld'
-                        def tag = "${mavenpom.version}"
-                        //sh 'sshPut -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228, from: "/var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml", into: '.''
-                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo sed 's/tag/${mavenpom.version}/g' Deployment.yaml"
-                        sh "ssh -o StrictHostKeyChecking=no -l ubuntu 172.31.22.228 sudo kubectl get all"
-                    }
-
+                     {
+                        def remote = [:]
+                        remote.name = 'ubuntu'
+                        remote.host = '172.31.22.228'
+                        remote.user = 'ubuntu'
+                       // remote.password = 'password'
+                        remote.allowAnyHosts = true
+                            sshPut remote: remote, from: '/var/lib/jenkins/workspace/Tomcat-Project/pom.xml', into: '.'
+                   }
                 }
             }
         }
