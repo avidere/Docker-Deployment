@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  labels:
+    app: app-tomcat
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-tomcat
+  template:
+    metadata:
+      labels:
+        app: app-tomcat
+    spec:
+      containers:
+      - name: app-tomcat
+        image: avinashdere99/tomcat:${mavenpom.version}
+        ports:
+        - containerPort: 8080
