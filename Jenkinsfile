@@ -135,13 +135,6 @@ pipeline {
                 }
             }
         }
-        stage('update k8s file'){
-            steps{
-                script{
-
-                }
-            }
-        }
     }
 }
 
