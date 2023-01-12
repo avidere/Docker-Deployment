@@ -9,7 +9,7 @@ pipeline {
 
         def mvntest = 'mvn test '
         def mvnpackage = 'mvn clean install'
-
+        def build_no = "${env.BUILD_NUMBER}"
         def sonar_cred = 'sonar'
         def code_analysis = 'mvn clean install sonar:sonar'
         def utest_url = 'target/surefire-reports/**/*.xml'
@@ -84,7 +84,7 @@ pipeline {
                     nexusVersion: "${env.nex_ver}",
                     protocol: "${env.proto}",
                     repository: 'tomcat-Release',
-                    version: "${mavenpom.version}"
+                    version: "${mavenpom.version}-${env.build_no}"
                     echo 'Artifact uploaded to nexus repository'
                     
                 }
@@ -138,12 +138,12 @@ pipeline {
                         def artifactId= 'helloworld'
                         def tag = "${mavenpom.version}"
                     /* groovylint-disable-next-line GStringExpressionWithinString */
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sed -i 's/tag/${mavenpom.version}/g' Deployment.yaml "
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sed -i 's/tag/${mavenpom.version}-${env.build_no}/g' Deployment.yaml "
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 sudo cp Deployment.yaml service.yaml /home/ubuntu/"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} -t avinashdere99/tomcat:${mavenpom.version} ."
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker build --build-arg artifact_id=${artifactId} --build-arg host_name=${env.nex_url} --build-arg version=${mavenpom.version} --build-args build_no=${env.build_no} -t avinashdere99/tomcat:${mavenpom.version}-${env.build_no} ."
                         sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker login -u $docker_user -p $docker_pass"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}"
-                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}"
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker push avinashdere99/tomcat:${mavenpom.version}-${env.build_no}"
+                        sh "ssh -o StrictHostKeyChecking=no -l dockeradmin 172.31.22.228 docker rmi avinashdere99/tomcat:${mavenpom.version}-${env.build_no}"
                     }
                    }
                 }
