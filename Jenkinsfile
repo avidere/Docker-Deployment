@@ -16,7 +16,7 @@ pipeline {
 
         def nex_cred = 'nexus'
         def grp_ID = 'example.demo'
-        def nex_url = '54.178.111.148:8081'
+        def nex_url = '35.78.183.199:8081'
         def nex_ver = 'nexus3'
         def proto = 'http'
 
@@ -125,6 +125,7 @@ pipeline {
                         remote.allowAnyHosts = true
                         sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Deployment.yaml', into: '.'
                         sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/service.yaml', into: '.'
+                        sshPut remote: remote, from: '/var/lib/jenkins/workspace/Docker Deployment/Dockerfile', into: '.'
                 }
             }
         }
